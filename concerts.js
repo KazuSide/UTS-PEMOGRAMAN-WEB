@@ -11,7 +11,7 @@ export const concerts = [
     priceNum: 350000,
     availability: 23,
     gradient: 'linear-gradient(135deg, #1a0533 0%, #6b21a8 50%, #0f172a 100%)',
-    image:"https://assets.artatix.co.id/event/UGGWWZJ8JT.jpg",
+    image:"https://www.nme.com/wp-content/uploads/2022/06/pamungkas-birdy-album-review.jpg",
   },
   {
     id: 2,
@@ -25,7 +25,7 @@ export const concerts = [
     priceNum: 450000,
     availability: 67,
     gradient: 'linear-gradient(135deg, #0c1445 0%, #1e3a5f 50%, #0f3460 100%)',
-    image:"https://raisaliveinconcert.com/assets/images/img-header.webp",
+    image:"https://cloud.jpnn.com/photo/arsip/normal/2023/12/15/penyanyi-raisa-foto-dok-juni-records-cvupy-ezqu.jpg",
   },
   {
     id: 3,
@@ -40,7 +40,7 @@ export const concerts = [
     availability: 8,
     emoji: '✨',
     gradient: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
-    image:"https://imgs.search.brave.com/qsnOhbFzUIQxVrLXpbSG5_Pte9Z_OQHf4ljEuGkTkf8/rs:fit:0:180:1:0/g:ce/aHR0cHM6Ly9jZG4x/LXByb2R1Y3Rpb24t/aW1hZ2VzLWtseS5h/a2FtYWl6ZWQubmV0/LzRpX2pPOUNRMEpy/Y1MxSDdqSWNNaFBR/d05hQT0vMzI4eDE2/Ni9zbWFydC9maWx0/ZXJzOnF1YWxpdHko/NzUpOnN0cmlwX2lj/YygpOmZvcm1hdCh3/ZWJwKS9rbHktbWVk/aWEtcHJvZHVjdGlv/bi9tZWRpYXMvNDkw/OTM3OC9vcmlnaW5h/bC8wODQ4OTI4MDBf/MTcyMjgyNTQ2Ni10/dWx1c18tX2Fkcmlh/bl9wdXRyYV8tX2Zp/bWVsYS5qcGVn",
+    image:"https://mediapijar.com/wp-content/uploads/2017/12/tulus.jpg",
   },
   {
     id: 4,
@@ -53,8 +53,8 @@ export const concerts = [
     price: 'Rp 700.000',
     priceNum: 700000,
     availability: 45,
-    emoji: '🔥',
-    gradient: 'linear-gradient(135deg, #1a0000 0%, #7f1d1d 50%, #450a0a 100%)',
+    gradient: 'linear-gradient(135deg, #0c1445 0%, #1e3a5f 50%, #0f3460 100%)',
+    image:"https://dynamicmedia.livenationinternational.com/x/d/h/faf1d3b3-9283-4aec-8bda-5d08708bc69f.png?format=webp&width=3840&quality=75",
   },
   {
     id: 5,
@@ -67,8 +67,8 @@ export const concerts = [
     price: 'Rp 280.000',
     priceNum: 280000,
     availability: 81,
-    emoji: '🦋',
-    gradient: 'linear-gradient(135deg, #0d0221 0%, #240046 50%, #3c096c 100%)',
+    gradient: 'linear-gradient(135deg, #0c1445 0%, #1e3a5f 50%, #0f3460 100%)',
+    image:"https://cdn.antaranews.com/cache/1200x800/2023/07/15/Isyana-Sarasvati-MAIN-Photo-Profile-2023.jpg",
   },
   {
     id: 6,
@@ -81,8 +81,8 @@ export const concerts = [
     price: 'Rp 320.000',
     priceNum: 320000,
     availability: 55,
-    emoji: '🌿',
-    gradient: 'linear-gradient(135deg, #052e16 0%, #14532d 50%, #166534 100%)',
+    gradient: 'linear-gradient(135deg, #0c1445 0%, #1e3a5f 50%, #0f3460 100%)',
+    image:"https://cdn.medcom.id/dynamic/content/2025/08/31/1776370/gx5uBPbX31.jpg?w=1024",
   },
   {
     id: 7,
@@ -95,8 +95,8 @@ export const concerts = [
     price: 'Rp 375.000',
     priceNum: 375000,
     availability: 72,
-    emoji: '🎷',
-    gradient: 'linear-gradient(135deg, #1c1917 0%, #78350f 50%, #92400e 100%)',
+    gradient: 'linear-gradient(135deg, #0c1445 0%, #1e3a5f 50%, #0f3460 100%)',
+    image:"https://images.genius.com/ba09aa23b36ae09f314bda2bd46757cd.640x640x1.jpg",
   },
   {
     id: 8,
@@ -109,8 +109,8 @@ export const concerts = [
     price: 'Rp 250.000',
     priceNum: 250000,
     availability: 90,
-    emoji: '🌅',
-    gradient: 'linear-gradient(135deg, #0c0a09 0%, #1c0a00 50%, #7c2d12 100%)',
+    gradient: 'linear-gradient(135deg, #0c1445 0%, #1e3a5f 50%, #0f3460 100%)',
+    image:"https://www.lazone.id/storage/news/April2023/10%20April/Music/orig-reality%20club-1.jpg",
   },
 ]
 
