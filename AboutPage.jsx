@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-dark-900 text-white font-body py-16 px-4 sm:px-8">
+    <div className="min-h-screen bg-dark-900 text-white font-body pt-32 pb-16 px-4 sm:px-8">
       <div className="max-w-4xl mx-auto space-y-12">
         
         <section className="text-center space-y-4">
