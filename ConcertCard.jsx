@@ -18,7 +18,9 @@ const TicketModal = ({ concert, onClose }) => {
   const basePrice = concert.priceNum
   const selectedCat = categories.find((c) => c.id === category)
   const unitPrice = basePrice * selectedCat.multiplier
-  const total = unitPrice * qty
+  const subtotal = unitPrice * qty
+  const discount = qty >= 2 ? subtotal * 0.1 : 0
+  const total = subtotal - discount
 
   const formatRp = (val) =>
     new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(val)
@@ -48,10 +50,63 @@ const TicketModal = ({ concert, onClose }) => {
           />
 
           <button
-            onClick={onClose}
-            className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-black/30 hover:bg-black/60 text-white transition-all duration-200 text-sm"
+          onClick={onClose}
+            className="
+              absolute
+              top-4
+              right-4
+              w-10
+              h-10
+              rounded-full
+              bg-black/20
+              hover:bg-black/40
+              transition-all
+              duration-300
+              flex
+              items-center
+              justify-center
+              cursor-pointer
+              group
+              "
+              aria-label="Close"
           >
-            ✕
+
+          <div className="relative w-4 h-4">
+
+          <span
+            className="
+              absolute
+              left-1/2
+              top-1/2
+              w-4
+              h-[2px]
+              bg-white
+              rounded-full
+              -translate-x-1/2
+              -translate-y-1/2
+              rotate-45
+              group-hover:bg-neon-yellow
+              "
+          />
+
+          <span
+            className="
+              absolute
+              left-1/2
+              top-1/2
+              w-4
+              h-[2px]
+              bg-white
+              rounded-full
+              -translate-x-1/2
+              -translate-y-1/2
+              -rotate-45
+              group-hover:bg-neon-yellow
+              "
+          />
+
+          </div>
+
           </button>
 
           <div className="flex items-center gap-3 relative z-10">
@@ -132,19 +187,51 @@ const TicketModal = ({ concert, onClose }) => {
               </div>
 
               {/* Summary box */}
-              <div className="rounded-sm bg-dark-700/60 border border-white/5 p-4 space-y-2">
-                <div className="flex justify-between text-sm font-body">
-                  <span className="text-white/50">Harga satuan ({selectedCat.label})</span>
-                  <span className="text-white">{formatRp(unitPrice)}</span>
+              <div className="rounded-sm bg-dark-700/60 border border-white/5 p-4 space-y-3">
+
+                <div className="flex justify-between text-sm">
+                  <span className="text-white/50">
+                    Harga satuan ({selectedCat.label})
+                  </span>
+
+                  <span className="text-white">
+                    {formatRp(unitPrice)}
+                  </span>
                 </div>
-                <div className="flex justify-between text-sm font-body">
-                  <span className="text-white/50">Jumlah</span>
-                  <span className="text-white">x{qty}</span>
+
+                <div className="flex justify-between text-sm">
+                  <span className="text-white/50">
+                    Jumlah
+                  </span>
+
+                  <span className="text-white">
+                    x{qty}
+                  </span>
                 </div>
-                <div className="border-t border-white/10 pt-2 flex justify-between items-center">
-                  <span className="font-bold text-white">Total</span>
-                  <span className="font-display text-xl text-neon-yellow">{formatRp(total)}</span>
+
+                {qty >= 2 && (
+                <div className="flex justify-between">
+
+                  <span className="text-neon-cyan">
+                    Diskon 10%
+                  </span>
+
+                  <span className="text-neon-cyan">
+                    − {formatRp(discount)}
+                  </span>
+
                 </div>
+                )}
+
+                <div className="border-t border-white/10 pt-3 flex justify-between">
+                  <span className="font-bold text-white">
+                    TOTAL
+                  </span>
+                  <span className="font-display text-xl text-neon-yellow">
+                    {formatRp(total)}
+                  </span>
+                </div>
+
               </div>
 
               <button
@@ -156,48 +243,178 @@ const TicketModal = ({ concert, onClose }) => {
             </>
           )}
 
-          {/* STEP 2 — Konfirmasi */}
+          {/* STEP 2 — Detail Konser */}
           {step === 2 && (
-            <>
-              <div>
-                <p className="text-xs font-mono text-white/40 tracking-widest mb-4 uppercase">Konfirmasi Pesanan</p>
-                <div className="space-y-3">
-                  {[
-                    { label: 'Konser', val: concert.artist },
-                    { label: 'Tour', val: concert.tourName },
-                    { label: 'Venue', val: `${concert.venue}, ${concert.city}` },
-                    { label: 'Tanggal', val: concert.date },
-                    { label: 'Kategori', val: selectedCat.label },
-                    { label: 'Jumlah', val: `${qty} tiket` },
-                  ].map((item) => (
-                    <div key={item.label} className="flex justify-between text-sm border-b border-white/5 pb-2">
-                      <span className="text-white/40 font-mono text-xs tracking-widest">{item.label.toUpperCase()}</span>
-                      <span className="text-white font-body text-right max-w-[55%]">{item.val}</span>
+          <>
+            <div>
+
+              <p className="text-xs font-mono text-white/40 tracking-widest mb-4 uppercase">
+                Detail Konser
+              </p>
+
+              <div className="rounded-sm overflow-hidden border border-white/10 bg-dark-700/60">
+
+                {/* Header */}
+                <div
+                  className="px-5 py-6"
+                  style={{
+                    background: concert.gradient,
+                  }}
+                >
+
+                  <div className="flex items-center gap-4">
+
+                    <div className="text-5xl">
+                      {concert.emoji}
                     </div>
-                  ))}
+
+                    <div>
+
+                      <h2 className="font-display text-2xl text-white tracking-wider uppercase">
+                        {concert.artist}
+                      </h2>
+
+                      <p className="text-white/70 text-sm">
+                        {concert.venue}, {concert.city}
+                      </p>
+
+                    </div>
+
+                  </div>
+
                 </div>
+
+                {/* Content */}
+                <div className="p-5 space-y-4">
+
+                  <div className="flex justify-between text-sm border-b border-white/10 pb-3">
+                    <span className="text-white/40 font-mono">
+                      TOUR
+                    </span>
+
+                    <span className="text-white">
+                      {concert.tourName}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between text-sm border-b border-white/10 pb-3">
+                    <span className="text-white/40 font-mono">
+                      TANGGAL
+                    </span>
+
+                    <span className="text-white">
+                      {concert.date}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between text-sm border-b border-white/10 pb-3">
+                    <span className="text-white/40 font-mono">
+                      KATEGORI
+                    </span>
+
+                    <span className="text-neon-yellow">
+                      {selectedCat.label}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between text-sm border-b border-white/10 pb-3">
+                    <span className="text-white/40 font-mono">
+                      JUMLAH
+                    </span>
+
+                    <span className="text-white">
+                      {qty} tiket
+                    </span>
+                  </div>
+
+                  <div className="pt-2">
+
+                    <p className="text-white/40 font-mono text-xs mb-3">
+                      DESKRIPSI
+                    </p>
+
+                    <p className="text-sm text-white/70 leading-7">
+
+                      Bersiap menikmati pengalaman konser
+                      <span className="text-neon-pink">
+                        {' '}{concert.artist}
+                      </span>
+                      {' '}melalui tur
+                      <span className="text-neon-cyan">
+                        {' '}{concert.tourName}
+                      </span>
+                      .
+
+                      Nikmati tata panggung spektakuler,
+                      pengalaman audio visual premium,
+                      serta atmosfer konser yang lebih hidup.
+
+                    </p>
+
+                  </div>
+
+                  <div className="border-t border-white/10 pt-4 flex justify-between items-center">
+
+                    <span className="font-bold text-white">
+                      TOTAL
+                    </span>
+
+                    <span className="font-display text-2xl text-neon-yellow">
+                      {formatRp(total)}
+                    </span>
+
+                  </div>
+
+                </div>
+
               </div>
 
-              <div className="rounded-sm bg-neon-yellow/5 border border-neon-yellow/20 p-4 flex justify-between items-center">
-                <span className="font-bold text-white">TOTAL BAYAR</span>
-                <span className="font-display text-2xl text-neon-yellow">{formatRp(total)}</span>
-              </div>
+            </div>
 
-              <div className="flex gap-3">
-                <button
-                  onClick={() => setStep(1)}
-                  className="flex-1 py-3 glass border border-white/10 text-white/60 font-mono text-sm tracking-widest rounded-sm hover:text-white hover:border-white/30 transition-all duration-300"
-                >
-                  ← KEMBALI
-                </button>
-                <button
-                  onClick={() => setStep(3)}
-                  className="flex-1 py-3 bg-neon-pink text-black font-bold font-display tracking-widest text-sm rounded-sm hover:bg-white transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,45,120,0.5)] active:scale-[0.98]"
-                >
-                  BAYAR SEKARANG
-                </button>
-              </div>
-            </>
+            <div className="flex gap-3">
+
+              <button
+                onClick={() => setStep(1)}
+                className="
+                flex-1
+                py-3
+                glass
+                border
+                border-white/10
+                text-white/60
+                font-mono
+                text-sm
+                tracking-widest
+                rounded-sm
+                hover:text-white
+                hover:border-white/30
+                transition-all
+                "
+              >
+                ← KEMBALI
+              </button>
+
+              <button
+                onClick={() => setStep(3)}
+                className="
+                flex-1
+                py-3
+                bg-neon-pink
+                text-black
+                font-bold
+                font-display
+                tracking-widest
+                text-sm
+                rounded-sm
+                hover:bg-white
+                transition-all
+                "
+              >
+                BAYAR →
+              </button>
+
+            </div>
+          </>
           )}
 
           {/* STEP 3 — Sukses */}
