@@ -1,12 +1,9 @@
 import { Link } from 'react-router-dom'
-import HomePage from '../pages/HomePage'
-import ExploreePage from '../pages/ExplorePage'
-import ArtistsPage from '../pages/ArtistsPage'
 
 
 const Footer = () => {
   return (
-    <footer className="relative z-10 border-t border-white/5 bg-dark-800 mt-20">
+    <footer className="relative border-t border-white/5 bg-dark-800 mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           {/* Brand */}
@@ -54,6 +51,8 @@ const Footer = () => {
           </ul>
         </div>
 
+        </div>{/* end grid */}
+
         <div className="mt-12 pt-6 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-white/20 text-xs font-mono tracking-wider">
             © 2025 STAGEFRONT. ALL RIGHTS RESERVED.
@@ -63,7 +62,6 @@ const Footer = () => {
           </p>
         </div>
       </div>
-    </div>
     </footer>
   )
 }
