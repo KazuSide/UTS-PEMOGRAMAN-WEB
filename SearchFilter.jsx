@@ -45,7 +45,7 @@ const SearchFilter = ({ onFilter }) => {
             />
           </div>
 
-          {/* Genre select */}
+          {/* Genre select — nilai uppercase agar cocok dengan data concerts */}
           <select
             name="genre"
             value={genre}
@@ -53,13 +53,13 @@ const SearchFilter = ({ onFilter }) => {
             className="sm:w-44 px-4 py-3 bg-dark-700/60 border border-white/10 rounded-sm text-white text-sm font-body focus:outline-none focus:border-neon-cyan/50 transition-all duration-300 appearance-none cursor-pointer"
           >
             <option value="">Semua Genre</option>
-            <option value="pop">Pop</option>
-            <option value="rock">Rock</option>
-            <option value="rnb">R&B / Soul</option>
-            <option value="edm">EDM</option>
-            <option value="indie">Indie</option>
-            <option value="jazz">Jazz</option>
-            <option value="hiphop">Hip-Hop</option>
+            <option value="POP">Pop</option>
+            <option value="ROCK">Rock</option>
+            <option value="SOUL">Soul / R&B</option>
+            <option value="EDM">EDM</option>
+            <option value="INDIE">Indie</option>
+            <option value="JAZZ">Jazz</option>
+            <option value="HIP-HOP">Hip-Hop</option>
           </select>
 
           <button
@@ -96,9 +96,11 @@ const SearchFilter = ({ onFilter }) => {
               />
             </div>
 
-            {/* Date from */}
+            {/* Date from — label diperjelas */}
             <div>
-              <label className="block text-xs font-mono text-white/40 mb-2 tracking-widest uppercase">Tanggal Mulai</label>
+              <label className="block text-xs font-mono text-white/40 mb-2 tracking-widest uppercase">
+                Tampilkan Konser Setelah
+              </label>
               <input
                 type="date"
                 name="dateFrom"
@@ -106,6 +108,11 @@ const SearchFilter = ({ onFilter }) => {
                 onChange={(e) => setDateFrom(e.target.value)}
                 className="w-full px-3 py-2.5 bg-dark-700/60 border border-white/10 rounded-sm text-white text-sm focus:outline-none focus:border-neon-pink/40 transition-all duration-300 [color-scheme:dark]"
               />
+              {dateFrom && (
+                <p className="text-xs text-neon-cyan/60 font-mono mt-1">
+                  Filter aktif: ≥ {new Date(dateFrom).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
+                </p>
+              )}
             </div>
 
             {/* Price range */}
@@ -143,6 +150,36 @@ const SearchFilter = ({ onFilter }) => {
                 Tampilkan hanya konser yang masih tersedia tiket
               </label>
             </div>
+
+            {/* Active filters badge */}
+            {(genre || city || dateFrom || onlyAvailable) && (
+              <div className="sm:col-span-2 lg:col-span-3 flex flex-wrap gap-2">
+                {genre && (
+                  <span className="inline-flex items-center gap-1 px-2 py-1 rounded-sm bg-neon-pink/10 border border-neon-pink/30 text-neon-pink text-xs font-mono">
+                    Genre: {genre}
+                    <button type="button" onClick={() => setGenre('')} className="hover:text-white ml-1">✕</button>
+                  </span>
+                )}
+                {city && (
+                  <span className="inline-flex items-center gap-1 px-2 py-1 rounded-sm bg-neon-cyan/10 border border-neon-cyan/30 text-neon-cyan text-xs font-mono">
+                    Kota: {city}
+                    <button type="button" onClick={() => setCity('')} className="hover:text-white ml-1">✕</button>
+                  </span>
+                )}
+                {dateFrom && (
+                  <span className="inline-flex items-center gap-1 px-2 py-1 rounded-sm bg-neon-yellow/10 border border-neon-yellow/30 text-neon-yellow text-xs font-mono">
+                    Setelah: {dateFrom}
+                    <button type="button" onClick={() => setDateFrom('')} className="hover:text-white ml-1">✕</button>
+                  </span>
+                )}
+                {onlyAvailable && (
+                  <span className="inline-flex items-center gap-1 px-2 py-1 rounded-sm bg-green-500/10 border border-green-500/30 text-green-400 text-xs font-mono">
+                    Tersedia saja
+                    <button type="button" onClick={() => setOnlyAvailable(false)} className="hover:text-white ml-1">✕</button>
+                  </span>
+                )}
+              </div>
+            )}
 
             {/* Action buttons */}
             <div className="sm:col-span-2 lg:col-span-3 flex gap-3">
