@@ -128,10 +128,6 @@ const ExplorePage = () => {
 
         {/* HEADER */}
         <div className="mb-12 animate-fade-in-up">
-          <p className="text-xs font-mono text-neon-pink tracking-widest mb-3">
-            // EXPLORE
-          </p>
-
           <h1 className="font-display text-5xl sm:text-6xl text-white mb-4">
             BERITA & <br />
             <span className="shimmer-text">ARTIKEL</span>
