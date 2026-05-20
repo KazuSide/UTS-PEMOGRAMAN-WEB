@@ -317,7 +317,7 @@ const ExplorePage = () => {
                     leading-relaxed
                     line-clamp-3
                     ">
-                      {post.body}
+                      {post.preview}
                     </p>
 
                     {/* EXPANDED */}
