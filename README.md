@@ -39,6 +39,7 @@ concert-ticketing/
 │   │   ├── Footer.jsx
 │   │   ├── ConcertCard.jsx
 │   │   └── SearchFilter.jsx 
+│   │   └── HowItWorks.jsx
 │   ├── data/
 │   │   └── concerts.js
 │   ├── pages/
