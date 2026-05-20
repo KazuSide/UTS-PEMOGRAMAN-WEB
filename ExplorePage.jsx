@@ -85,7 +85,7 @@ const ExplorePage = () => {
                 <div className="absolute inset-2 w-12 h-12 border-t-2 border-neon-cyan rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '0.8s' }} />
               </div>
               <p className="font-mono text-neon-pink tracking-widest text-sm animate-pulse">MEMUAT DATA...</p>
-              <p className="font-body text-white/20 text-xs mt-2">Mengambil dari JSONPlaceholder API</p>
+              <p className="font-body text-white/20 text-xs mt-2">Kumpulan artikel tentang artis</p>
             </div>
           )}
 
