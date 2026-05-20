@@ -3,6 +3,7 @@ import HomePage from '../pages/HomePage'
 import ExploreePage from '../pages/ExplorePage'
 import ArtistsPage from '../pages/ArtistsPage'
 
+
 const Footer = () => {
   return (
     <footer className="relative z-10 border-t border-white/5 bg-dark-800 mt-20">
@@ -53,20 +54,6 @@ const Footer = () => {
           </ul>
         </div>
 
-          <div>
-            <h3 className="font-mono text-xs tracking-widest text-neon-cyan mb-4 uppercase">Support</h3>
-            <ul className="space-y-2">
-              {['FAQ', 'Kebijakan Refund', 'Hubungi Kami', 'Syarat & Ketentuan'].map((item) => (
-                <li key={item}>
-                  <a href="#" className="text-sm text-white/40 hover:text-white font-body transition-colors duration-300">
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
         <div className="mt-12 pt-6 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-white/20 text-xs font-mono tracking-wider">
             © 2025 STAGEFRONT. ALL RIGHTS RESERVED.
@@ -76,6 +63,7 @@ const Footer = () => {
           </p>
         </div>
       </div>
+    </div>
     </footer>
   )
 }
