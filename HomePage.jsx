@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import HowItWorks from '../components/HowItWorks'
 import { Link } from 'react-router-dom'
 import SearchFilter from '../components/SearchFilter'
 import ConcertCard from '../components/ConcertCard'
@@ -10,6 +11,7 @@ const HomePage = () => {
   const [heroIndex, setHeroIndex] = useState(0)
   const [mounted, setMounted] = useState(false)
   const [sortBy, setSortBy] = useState('terbaru')
+  const [showHowItWorks, setShowHowItWorks] = useState(false)
 
   const applySortAndFilter = (list, sort) => {
     const sorted = [...list]
@@ -23,9 +25,9 @@ const HomePage = () => {
   }
 
   const heroItems = [
-    { artist: 'PAMUNGKAS', tour: 'To the Bone World Tour', date: '15 Agustus 2025', emoji: '🎸', color: '#FF2D78' },
-    { artist: 'RICH BRIAN', tour: 'The Sailor World Tour', date: '12 September 2025', emoji: '🔥', color: '#00F5FF' },
-    { artist: 'RAISA', tour: 'Teduh Concert', date: '22 Agustus 2025', emoji: '🌙', color: '#FFE600' },
+    { artist: 'PAMUNGKAS', tour: 'To the Bone World Tour', date: '15 Agustus 2025', color: '#FF2D78' },
+    { artist: 'RICH BRIAN', tour: 'The Sailor World Tour', date: '12 September 2025', color: '#00F5FF' },
+    { artist: 'RAISA', tour: 'Teduh Concert', date: '22 Agustus 2025', color: '#FFE600' },
   ]
 
   useEffect(() => {
@@ -55,6 +57,20 @@ const HomePage = () => {
     }
     if (filterObj.city) {
       result = result.filter((c) => c.city.toLowerCase().includes(filterObj.city.toLowerCase()))
+    }
+    if (filterObj.dateFrom) {
+      // Parse concert dates (format: "15 Agustus 2025") to compare
+      const monthMap = {
+        januari: 0, februari: 1, maret: 2, april: 3, mei: 4, juni: 5,
+        juli: 6, agustus: 7, september: 8, oktober: 9, november: 10, desember: 11,
+      }
+      const filterDate = new Date(filterObj.dateFrom)
+      result = result.filter((c) => {
+        const parts = c.date.toLowerCase().split(' ')
+        if (parts.length < 3) return true
+        const concertDate = new Date(Number(parts[2]), monthMap[parts[1]] ?? 0, Number(parts[0]))
+        return concertDate >= filterDate
+      })
     }
     if (filterObj.priceRange) {
       result = result.filter((c) => c.priceNum <= filterObj.priceRange)
@@ -132,7 +148,7 @@ const HomePage = () => {
                 >
                   JELAJAHI KONSER
                 </Link>
-                <button className="px-8 py-3.5 glass border border-white/15 text-white font-mono tracking-widest text-sm rounded-sm hover:border-neon-cyan/40 hover:text-neon-cyan transition-all duration-300">
+                <button onClick={() => setShowHowItWorks(true)} className="px-8 py-3.5 glass border border-white/15 text-white font-mono tracking-widest text-sm rounded-sm hover:border-neon-cyan/40 hover:text-neon-cyan transition-all duration-300">
                   CARA KERJA
                 </button>
               </div>
@@ -317,6 +333,9 @@ const HomePage = () => {
           </div>
         )}
       </section>
+
+      {/* ====== HOW IT WORKS MODAL ====== */}
+      {showHowItWorks && <HowItWorks onClose={() => setShowHowItWorks(false)} />}
     </>
   )
 }
