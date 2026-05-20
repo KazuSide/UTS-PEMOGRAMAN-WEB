@@ -39,9 +39,21 @@
     const MAX_QTY = 6
 
     const categories = [
-      { id: 'festival', label: 'Festival', multiplier: 1, desc: 'Area festival, standing' },
-      { id: 'vip', label: 'VIP', multiplier: 2, desc: 'Area VIP, kursi premium' },
-      { id: 'vvip', label: 'VVIP', multiplier: 3, desc: 'Meet & greet + kursi terdepan' },
+      {
+        id: 'festival', label: 'Festival', multiplier: 1,
+        desc: 'Area festival, standing',
+        benefits: ['Akses area festival', 'Standing zone', 'Free merchandise lanyard', 'Akses food court'],
+      },
+      {
+        id: 'vip', label: 'VIP', multiplier: 2,
+        desc: 'Area VIP, kursi premium',
+        benefits: ['Kursi premium VIP zone', 'Early entry 30 menit', 'Exclusive merchandise pack', 'Akses lounge VIP'],
+      },
+      {
+        id: 'vvip', label: 'VVIP', multiplier: 3,
+        desc: 'Meet & greet + kursi terdepan',
+        benefits: ['Kursi terdepan row 1–3', 'Meet & greet eksklusif', 'Foto bersama artis', 'Full merchandise bundle', 'Akses backstage pass'],
+      },
     ]
 
     const basePrice = concert.priceNum
@@ -50,6 +62,7 @@
     const subtotal = unitPrice * qty
     const discount = qty >= 2 ? subtotal * 0.1 : 0
     const total = subtotal - discount
+    const originalTotal = subtotal
 
     const formatRp = (val) =>
       new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(val)
@@ -65,8 +78,8 @@
         onClick={handleBackdrop}
       >
         <div
-          className="relative w-full max-w-sm rounded-lg overflow-hidden animate-fade-in-up"
-          style={{ animationFillMode: 'forwards' }}
+          className="relative w-full max-w-sm rounded-lg animate-fade-in-up flex flex-col"
+          style={{ animationFillMode: 'forwards', maxHeight: '92vh', overflow: 'hidden' }}
         >
           {/* ── HEADER with gradient ── */}
           <div
@@ -80,10 +93,10 @@
 
             <button
               onClick={onClose}
-              className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/20 hover:bg-black/40 transition-all duration-300 flex items-center justify-center cursor-pointer group"
+              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/20 hover:bg-black/40 transition-all duration-300 flex items-center justify-center cursor-pointer group"
               aria-label="Close"
             >
-              <div className="relative w-4 h-4">
+              <div className="relative w-3   h-3">
                 <span className="absolute left-1/2 top-1/2 w-4 h-[2px] bg-white rounded-full -translate-x-1/2 -translate-y-1/2 rotate-45 group-hover:bg-neon-yellow" />
                 <span className="absolute left-1/2 top-1/2 w-4 h-[2px] bg-white rounded-full -translate-x-1/2 -translate-y-1/2 -rotate-45 group-hover:bg-neon-yellow" />
               </div>
@@ -117,7 +130,8 @@
           </div>
 
           {/* ── BODY ── */}
-          <div className="bg-dark-800 px-5 py-5 space-y-5">
+          <div className="bg-dark-800 flex-1 flex flex-col overflow-hidden">
+          <div className="flex-1 overflow-y-auto px-5 pt-5 pb-2 space-y-4" style={{ scrollbarWidth: 'none' }}>
 
             {/* STEP 1 — Pilih tiket */}
             {step === 1 && (
@@ -163,6 +177,19 @@
                   </div>
                 </div>
 
+                {/* Benefits */}
+                <div className="rounded-sm bg-dark-700/40 border border-white/5 p-3">
+                  <p className="text-xs font-mono text-white/40 tracking-widest mb-2">BENEFIT TERMASUK</p>
+                  <ul className="space-y-1.5">
+                    {selectedCat.benefits.map((b, i) => (
+                      <li key={i} className="flex items-center gap-2 text-xs text-white/60 font-body">
+                        <span className="text-neon-cyan text-[10px]">✦</span>
+                        {b}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
                 <div className="rounded-sm bg-dark-700/60 border border-white/5 p-4 space-y-3">
                   <div className="flex justify-between text-sm">
                     <span className="text-white/50">Harga satuan ({selectedCat.label})</span>
@@ -174,22 +201,21 @@
                   </div>
                   {qty >= 2 && (
                     <div className="flex justify-between">
-                      <span className="text-neon-cyan">Diskon 10%</span>
-                      <span className="text-neon-cyan">− {formatRp(discount)}</span>
+                      <span className="text-neon-cyan text-sm">Diskon 10%</span>
+                      <span className="text-neon-cyan text-sm">− {formatRp(discount)}</span>
                     </div>
                   )}
-                  <div className="border-t border-white/10 pt-3 flex justify-between">
-                    <span className="font-bold text-white">TOTAL</span>
-                    <span className="font-display text-xl text-neon-yellow">{formatRp(total)}</span>
+                  <div className="border-t border-white/10 pt-3 flex justify-between items-end">
+                    <span className="font-bold text-white text-sm">TOTAL</span>
+                    <div className="text-right">
+                      {qty >= 2 && (
+                        <p className="text-xs text-white/30 line-through font-mono">{formatRp(originalTotal)}</p>
+                      )}
+                      <span className="font-display text-xl text-neon-yellow">{formatRp(total)}</span>
+                    </div>
                   </div>
                 </div>
 
-                <button
-                  onClick={() => setStep(2)}
-                  className="w-full py-3.5 bg-neon-yellow text-black font-bold font-display tracking-widest text-sm rounded-sm hover:bg-white transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,230,0,0.4)] active:scale-[0.98]"
-                >
-                  LANJUTKAN →
-                </button>
               </>
             )}
 
@@ -197,78 +223,81 @@
             {step === 2 && (
               <>
                 <div>
-                  <p className="text-xs font-mono text-white/40 tracking-widest mb-4 uppercase">Detail Konser</p>
+                  <p className="text-xs font-mono text-white/40 tracking-widest mb-3 uppercase">Detail Konser</p>
                   <div className="rounded-sm overflow-hidden border border-white/10 bg-dark-700/60">
                     {/* Header with image */}
-                    <div className="relative h-32 overflow-hidden" style={{ background: concert.gradient }}>
-                      <ConcertImage
-                        concert={concert}
-                        style={{ objectFit: 'cover', objectPosition: 'center top' }}
-                      />
-                      {/* Overlay gradient for text readability */}
+                    <div className="relative h-28 overflow-hidden" style={{ background: concert.gradient }}>
+                      <ConcertImage concert={concert} style={{ objectFit: 'cover', objectPosition: 'center top' }} />
                       <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%)' }} />
-                      <div className="absolute bottom-0 left-0 p-4">
-                        <h2 className="font-display text-xl text-white tracking-wider uppercase">{concert.artist}</h2>
+                      <div className="absolute bottom-0 left-0 p-3">
+                        <h2 className="font-display text-lg text-white tracking-wider uppercase">{concert.artist}</h2>
                         <p className="text-white/70 text-xs">{concert.venue}, {concert.city}</p>
                       </div>
                     </div>
-
-                    <div className="p-5 space-y-4">
-                      <div className="flex justify-between text-sm border-b border-white/10 pb-3">
-                        <span className="text-white/40 font-mono">TOUR</span>
-                        <span className="text-white">{concert.tourName}</span>
-                      </div>
-                      <div className="flex justify-between text-sm border-b border-white/10 pb-3">
-                        <span className="text-white/40 font-mono">TANGGAL</span>
-                        <span className="text-white">{concert.date}</span>
-                      </div>
-                      <div className="flex justify-between text-sm border-b border-white/10 pb-3">
-                        <span className="text-white/40 font-mono">KATEGORI</span>
-                        <span className="text-neon-yellow">{selectedCat.label}</span>
-                      </div>
-                      <div className="flex justify-between text-sm border-b border-white/10 pb-3">
-                        <span className="text-white/40 font-mono">JUMLAH</span>
-                        <span className="text-white">{qty} tiket</span>
-                      </div>
-                      <div className="pt-2">
-                        <p className="text-white/40 font-mono text-xs mb-3">DESKRIPSI</p>
-                        <p className="text-sm text-white/70 leading-7">
-                          Bersiap menikmati pengalaman konser
-                          <span className="text-neon-pink"> {concert.artist}</span> melalui tur
-                          <span className="text-neon-cyan"> {concert.tourName}</span>.
-                          Nikmati tata panggung spektakuler, pengalaman audio visual premium,
-                          serta atmosfer konser yang lebih hidup.
+                    <div className="p-4 space-y-3">
+                      {[
+                        { label: 'TOUR', value: concert.tourName, cls: 'text-white' },
+                        { label: 'TANGGAL', value: concert.date, cls: 'text-white' },
+                        { label: 'KATEGORI', value: selectedCat.label, cls: 'text-neon-yellow' },
+                        { label: 'JUMLAH', value: `${qty} tiket`, cls: 'text-white' },
+                      ].map(({ label, value, cls }) => (
+                        <div key={label} className="flex justify-between text-sm border-b border-white/10 pb-3">
+                          <span className="text-white/40 font-mono">{label}</span>
+                          <span className={cls}>{value}</span>
+                        </div>
+                      ))}
+                      <div className="pt-1">
+                        <p className="text-white/40 font-mono text-xs mb-2">DESKRIPSI</p>
+                        <p className="text-xs text-white/60 leading-6">
+                          Nikmati konser <span className="text-neon-pink">{concert.artist}</span> dalam
+                          tur <span className="text-neon-cyan">{concert.tourName}</span> dengan
+                          tata panggung spektakuler dan pengalaman audio visual premium.
                         </p>
                       </div>
-                      <div className="border-t border-white/10 pt-4 flex justify-between items-center">
-                        <span className="font-bold text-white">TOTAL</span>
-                        <span className="font-display text-2xl text-neon-yellow">{formatRp(total)}</span>
+                      <div className="border-t border-white/10 pt-3 flex justify-between items-end">
+                        <span className="font-bold text-white text-sm">TOTAL</span>
+                        <div className="text-right">
+                          {qty >= 2 && (
+                            <p className="text-xs text-white/30 line-through font-mono">{formatRp(originalTotal)}</p>
+                          )}
+                          <span className="font-display text-xl text-neon-yellow">{formatRp(total)}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => setStep(1)}
-                    className="flex-1 py-3 glass border border-white/10 text-white/60 font-mono text-sm tracking-widest rounded-sm hover:text-white hover:border-white/30 transition-all"
-                  >← KEMBALI</button>
-                  <button
-                    onClick={() => setStep(3)}
-                    className="flex-1 py-3 bg-neon-pink text-black font-bold font-display tracking-widest text-sm rounded-sm hover:bg-white transition-all"
-                  >BAYAR →</button>
-                </div>
               </>
             )}
 
-            {/* STEP 3 — Sukses */}
+          </div>{/* end scrollable area */}
+
+          {/* ── STICKY FOOTER BUTTONS ── */}
+          {step === 1 && (
+            <div className="px-5 py-4 bg-dark-800 border-t border-white/5">
+              <button
+                onClick={() => setStep(2)}
+                className="w-full py-3.5 bg-neon-yellow text-black font-bold font-display tracking-widest text-sm rounded-sm hover:bg-white transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,230,0,0.4)] active:scale-[0.98]"
+              >LANJUTKAN →</button>
+            </div>
+          )}
+          {step === 2 && (
+            <div className="px-5 py-4 bg-dark-800 border-t border-white/5 flex gap-3">
+              <button
+                onClick={() => setStep(1)}
+                className="flex-1 py-3 glass border border-white/10 text-white/60 font-mono text-sm tracking-widest rounded-sm hover:text-white hover:border-white/30 transition-all"
+              >← KEMBALI</button>
+              <button
+                onClick={() => setStep(3)}
+                className="flex-1 py-3 bg-neon-pink text-black font-bold font-display tracking-widest text-sm rounded-sm hover:bg-white transition-all"
+              >BAYAR →</button>
+            </div>
+          )}
+          </div>{/* end bg-dark-800 wrapper */}
+
+            {/* STEP 3 — Sukses (full replacement, no scroll needed) */}
             {step === 3 && (
-              <div className="text-center py-4">
-                {/* Artist image in success screen */}
-                <div className="w-20 h-20 mx-auto mb-4 rounded-full overflow-hidden border-2 border-neon-pink shadow-[0_0_20px_rgba(255,45,120,0.4)]">
-                  <ConcertImage concert={concert} />
-                </div>
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-neon-pink/10 border-2 border-neon-pink flex items-center justify-center neon-border-pink">
+              <div className="bg-dark-800 px-5 py-6 text-center">
+                <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-neon-pink/10 border-2 border-neon-pink flex items-center justify-center">
                   <span className="text-neon-pink text-2xl">✓</span>
                 </div>
                 <h3 className="font-display text-xl text-white mb-2">PESANAN BERHASIL!</h3>
@@ -276,15 +305,13 @@
                   {qty} tiket <span className="text-neon-cyan">{selectedCat.label}</span> untuk
                 </p>
                 <p className="text-neon-yellow font-display mb-1">{concert.artist}</p>
-                <p className="text-white/30 text-xs font-body mb-6">{concert.date}</p>
+                <p className="text-white/30 text-xs font-body mb-5">{concert.date}</p>
 
                 <div className="glass rounded-sm p-4 mb-5 border border-neon-pink/20">
                   <p className="text-xs font-mono text-white/30 mb-3 tracking-widest">E-TICKET</p>
                   <div className="flex gap-px justify-center mb-2">
                     {Array.from({ length: 36 }).map((_, i) => (
-                      <div
-                        key={i}
-                        className="flex-1 max-w-[3px] rounded-px"
+                      <div key={i} className="flex-1 max-w-[3px] rounded-px"
                         style={{
                           height: `${Math.random() > 0.4 ? 28 : 18}px`,
                           background: i % 4 === 0 ? '#FF2D78' : 'rgba(255,255,255,0.25)',
@@ -303,7 +330,6 @@
                 >SELESAI ✓</button>
               </div>
             )}
-          </div>
         </div>
       </div>
     )
