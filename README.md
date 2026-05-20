@@ -38,18 +38,18 @@ concert-ticketing/
 │   │   ├── Header.jsx
 │   │   ├── Footer.jsx
 │   │   ├── ConcertCard.jsx
-│   │   └── SearchFilter.jsx 
+│   │   ├── SearchFilter.jsx 
 │   │   └── HowItWorks.jsx
 │   ├── data/
 │   │   └── concerts.js
 │   ├── pages/
 │   │   ├── HomePage.jsx
 │   │   ├── ExplorePage.jsx  
-│   │   └── ArtistsPage.jsx  
-|   |   └── AboutPage.jsx
-|   |   └── ContactPage.jsx
-|   |   └── FAQPage.jsx
-|   |   └── Refundpage.jsx
+│   │   ├── ArtistsPage.jsx  
+|   |   ├── AboutPage.jsx
+|   |   ├── ContactPage.jsx
+|   |   ├── FAQPage.jsx
+|   |   ├── Refundpage.jsx
 |   |   └── TermsPage.jsx
 │   ├── App.jsx
 │   ├── main.jsx
