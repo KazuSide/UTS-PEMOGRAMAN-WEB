@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import HowItWorks from '../components/HowItWorks'
 import { Link } from 'react-router-dom'
 import SearchFilter from '../components/SearchFilter'
@@ -9,34 +9,71 @@ const HomePage = () => {
   const [filtered, setFiltered] = useState(concerts)
   const [activeGenre, setActiveGenre] = useState('Semua')
   const [heroIndex, setHeroIndex] = useState(0)
-  const [mounted, setMounted] = useState(false)
   const [sortBy, setSortBy] = useState('terbaru')
   const [showHowItWorks, setShowHowItWorks] = useState(false)
+  const [isTransitioning, setIsTransitioning] = useState(false)
+  const carouselRef = useRef(null)
 
   const applySortAndFilter = (list, sort) => {
     const sorted = [...list]
-    if (sort === 'termurah') {
-      sorted.sort((a, b) => a.priceNum - b.priceNum)
-    } else if (sort === 'populer') {
-      sorted.sort((a, b) => b.availability - a.availability)
-    }
-    // 'terbaru' = default order (by id)
+    if (sort === 'termurah') sorted.sort((a, b) => a.priceNum - b.priceNum)
+    else if (sort === 'populer') sorted.sort((a, b) => b.availability - a.availability)
     return sorted
   }
 
+  // Hero banners — vibrant, full-bleed illustrated style like Artatix
   const heroItems = [
-    { artist: 'PAMUNGKAS', tour: 'To the Bone World Tour', date: '15 Agustus 2025', color: '#FF2D78' },
-    { artist: 'RICH BRIAN', tour: 'The Sailor World Tour', date: '12 September 2025', color: '#00F5FF' },
-    { artist: 'RAISA', tour: 'Teduh Concert', date: '22 Agustus 2025', color: '#FFE600' },
+    {
+      id: 0,
+      bg: 'linear-gradient(135deg, #FF6B35 0%, #FF8C42 40%, #FFA500 100%)',
+      accentColor: '#FF6B35',
+      tagline: 'Solusi Praktis Cetak',
+      title: 'Tiket\nGelang',
+      subtitle: 'Kelola event kamu lebih mudah dengan sistem tiket digital & gelang eksklusif',
+      cta: 'Pesan Sekarang',
+      badge: '🎫 NEW',
+      illustration: '🎪',
+    },
+    {
+      id: 1,
+      bg: 'linear-gradient(135deg, #6C63FF 0%, #3B82F6 50%, #06B6D4 100%)',
+      accentColor: '#6C63FF',
+      tagline: 'Concert Season 2025',
+      title: 'Temukan\nKonsermu',
+      subtitle: 'Dari indie lokal hingga megastar internasional, semua tiket ada di STAGEFRONT',
+      cta: 'Jelajahi Konser',
+      badge: '🔥 HOT',
+      illustration: '🎸',
+    },
+    {
+      id: 2,
+      bg: 'linear-gradient(135deg, #EC4899 0%, #F43F5E 50%, #FB923C 100%)',
+      accentColor: '#EC4899',
+      tagline: 'Limited Tickets Available',
+      title: 'Jangan\nKehabisan',
+      subtitle: 'Amankan tiket konser favoritmu sebelum terjual habis. Booking mudah & aman',
+      cta: 'Cek Tiket',
+      badge: '⚡ TERBATAS',
+      illustration: '🎤',
+    },
   ]
 
   useEffect(() => {
-    setMounted(true)
     const interval = setInterval(() => {
-      setHeroIndex((prev) => (prev + 1) % heroItems.length)
-    }, 4000)
+      goToSlide((prev) => (prev + 1) % heroItems.length)
+    }, 5000)
     return () => clearInterval(interval)
-  }, [])
+  }, [heroIndex])
+
+  const goToSlide = (indexOrFn) => {
+    const next = typeof indexOrFn === 'function' ? indexOrFn(heroIndex) : indexOrFn
+    if (next === heroIndex) return
+    setIsTransitioning(true)
+    setTimeout(() => {
+      setHeroIndex(next)
+      setIsTransitioning(false)
+    }, 300)
+  }
 
   const genres = ['Semua', 'POP', 'INDIE', 'SOUL', 'HIP-HOP', 'JAZZ']
 
@@ -52,18 +89,10 @@ const HomePage = () => {
         (c) => c.artist.toLowerCase().includes(q) || c.venue.toLowerCase().includes(q) || c.city.toLowerCase().includes(q)
       )
     }
-    if (filterObj.genre) {
-      result = result.filter((c) => c.genre.toLowerCase() === filterObj.genre.toLowerCase())
-    }
-    if (filterObj.city) {
-      result = result.filter((c) => c.city.toLowerCase().includes(filterObj.city.toLowerCase()))
-    }
+    if (filterObj.genre) result = result.filter((c) => c.genre.toLowerCase() === filterObj.genre.toLowerCase())
+    if (filterObj.city) result = result.filter((c) => c.city.toLowerCase().includes(filterObj.city.toLowerCase()))
     if (filterObj.dateFrom) {
-      // Parse concert dates (format: "15 Agustus 2025") to compare
-      const monthMap = {
-        januari: 0, februari: 1, maret: 2, april: 3, mei: 4, juni: 5,
-        juli: 6, agustus: 7, september: 8, oktober: 9, november: 10, desember: 11,
-      }
+      const monthMap = { januari:0,februari:1,maret:2,april:3,mei:4,juni:5,juli:6,agustus:7,september:8,oktober:9,november:10,desember:11 }
       const filterDate = new Date(filterObj.dateFrom)
       result = result.filter((c) => {
         const parts = c.date.toLowerCase().split(' ')
@@ -72,12 +101,8 @@ const HomePage = () => {
         return concertDate >= filterDate
       })
     }
-    if (filterObj.priceRange) {
-      result = result.filter((c) => c.priceNum <= filterObj.priceRange)
-    }
-    if (filterObj.onlyAvailable) {
-      result = result.filter((c) => c.availability > 0)
-    }
+    if (filterObj.priceRange) result = result.filter((c) => c.priceNum <= filterObj.priceRange)
+    if (filterObj.onlyAvailable) result = result.filter((c) => c.availability > 0)
     setFiltered(applySortAndFilter(result, sortBy))
   }
 
@@ -95,186 +120,128 @@ const HomePage = () => {
   const hero = heroItems[heroIndex]
 
   return (
-    <>
-      {/* ====== HERO ====== */}
-      <section
-        className="relative min-h-screen flex flex-col justify-center pt-16 overflow-hidden"
-        aria-label="Hero banner"
-      >
-        {/* Dynamic background */}
+    <div className="bg-dark-900 min-h-screen">
+
+      {/* ====== HERO CAROUSEL — full width, no rounding ====== */}
+      <section className="relative w-full overflow-hidden pt-16">
+        {/* Slide — edge to edge */}
         <div
-          className="absolute inset-0 transition-all duration-1000"
+          className="relative w-full flex items-center justify-between transition-opacity duration-300"
           style={{
-            background: `radial-gradient(ellipse at 50% 50%, ${hero.color}15 0%, transparent 70%)`,
+            background: hero.bg,
+            minHeight: '420px',
+            opacity: isTransitioning ? 0 : 1,
+            padding: '56px max(32px, calc((100vw - 1280px) / 2 + 32px))',
           }}
-        />
+        >
+          {/* Dynamic glow overlay */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: `radial-gradient(ellipse at 30% 50%, ${hero.accentColor}25 0%, transparent 65%)` }}
+          />
 
-        {/* Scanline effect */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-5">
-          {Array.from({ length: 20 }).map((_, i) => (
-            <div
-              key={i}
-              className="absolute left-0 right-0 h-px bg-white"
-              style={{ top: `${i * 5}%` }}
-            />
-          ))}
-        </div>
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            {/* Text side */}
-            <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 glass rounded-sm mb-6 border border-neon-pink/20">
-                <span className="w-2 h-2 bg-neon-pink rounded-full animate-ping" />
-                <span className="text-xs font-mono text-neon-pink tracking-widest">LIVE NOW — 2025 TOUR SEASON</span>
+          {/* Left: Text content */}
+          <div className="relative z-10 flex-1" style={{ maxWidth: '520px' }}>
+            {/* Badge row */}
+            <div className="flex items-center gap-2 mb-5">
+              <div className="flex items-center gap-1.5 bg-black/20 backdrop-blur-sm rounded-sm px-3 py-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
+                <span className="text-white font-mono font-bold text-xs tracking-widest">STAGEFRONT</span>
               </div>
-
-              <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl leading-none mb-3 text-white">
-                SAKSIKAN
-                <br />
-                <span className="shimmer-text">IDOLAMU</span>
-                <br />
-                SECARA LIVE
-              </h1>
-
-              <p className="text-white/50 font-body text-lg leading-relaxed mb-8 max-w-md">
-                Temukan dan amankan tiket konser artis favorit kamu. Dari indie lokal hingga megastar internasional, semua ada di STAGEFRONT.
-              </p>
-
-              <div className="flex flex-wrap gap-3">
-                <Link
-                  to="/explore"
-                  className="px-8 py-3.5 bg-neon-pink text-black font-bold font-mono tracking-widest text-sm rounded-sm hover:bg-white transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,45,120,0.6)] active:scale-95"
-                >
-                  JELAJAHI KONSER
-                </Link>
-                <button onClick={() => setShowHowItWorks(true)} className="px-8 py-3.5 glass border border-white/15 text-white font-mono tracking-widest text-sm rounded-sm hover:border-neon-cyan/40 hover:text-neon-cyan transition-all duration-300">
-                  CARA KERJA
-                </button>
-              </div>
-
-              {/* Stats */}
-              <div className="flex gap-8 mt-12 pt-8 border-t border-white/5">
-                {[
-                  { val: '200+', label: 'Konser' },
-                  { val: '50K+', label: 'Penonton' },
-                  { val: '30+', label: 'Kota' },
-                ].map((s) => (
-                  <div key={s.label}>
-                    <p className="font-display text-2xl text-neon-pink">{s.val}</p>
-                    <p className="text-xs font-mono text-white/30 tracking-widest mt-1">{s.label}</p>
-                  </div>
-                ))}
-              </div>
+              <span
+                className="font-mono font-bold text-xs px-2 py-0.5 rounded-sm"
+                style={{ background: hero.accentColor, color: 'white' }}
+              >
+                {hero.badge}
+              </span>
             </div>
 
-            {/* Featured ticket visual */}
-            <div className="relative flex items-center justify-center">
-              {/* Big emoji */}
-              <div
-                className="absolute text-[180px] opacity-10 select-none pointer-events-none"
-                style={{ filter: `drop-shadow(0 0 40px ${hero.color})` }}
+            <p className="text-white/70 font-mono text-xs mb-3 tracking-widest uppercase">{hero.tagline}</p>
+
+            <h1
+              className="text-white font-black leading-none mb-5"
+              style={{ fontSize: 'clamp(48px, 6vw, 88px)', whiteSpace: 'pre-line', textShadow: '0 4px 30px rgba(0,0,0,0.3)' }}
+            >
+              {hero.title}
+            </h1>
+
+            <p className="text-white/65 text-sm leading-relaxed mb-8" style={{ maxWidth: '360px' }}>
+              {hero.subtitle}
+            </p>
+
+            <div className="flex items-center gap-4">
+              <Link
+                to="/explore"
+                className="inline-block font-bold font-mono text-sm px-7 py-3.5 transition-all hover:scale-105 active:scale-95"
+                style={{
+                  background: 'white',
+                  color: hero.accentColor,
+                  boxShadow: `0 4px 24px ${hero.accentColor}50`,
+                  borderRadius: '2px',
+                }}
               >
-                {hero.emoji}
-              </div>
-
-              {/* Ticket card */}
-              <div
-                className="relative glass ticket-clip p-8 max-w-sm w-full transition-all duration-700"
-                style={{ borderColor: `${hero.color}40`, boxShadow: `0 0 40px ${hero.color}20` }}
+                {hero.cta} →
+              </Link>
+              <button
+                onClick={() => setShowHowItWorks(true)}
+                className="text-white/70 font-mono text-sm hover:text-white transition-colors tracking-widest"
               >
-                {/* Ticket top */}
-                <div className="flex justify-between items-start mb-6">
-                  <div>
-                    <p className="text-xs font-mono tracking-widest mb-2"
-                      style={{ color: hero.color }}>FEATURED TONIGHT</p>
-                    <h2 className="font-display text-3xl text-white transition-all duration-500">
-                      {hero.artist}
-                    </h2>
-                    <p className="text-sm text-white/40 font-body mt-1">{hero.tour}</p>
-                  </div>
-                  <span className="text-4xl">{hero.emoji}</span>
-                </div>
-
-                {/* Divider with holes */}
-                <div className="relative flex items-center my-5">
-                  <div className="w-4 h-4 rounded-full bg-dark-900 -ml-8 border border-white/10" />
-                  <div className="flex-1 border-t border-dashed border-white/15" />
-                  <div className="w-4 h-4 rounded-full bg-dark-900 -mr-8 border border-white/10" />
-                </div>
-
-                {/* Ticket info grid */}
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  {[
-                    { label: 'TANGGAL', val: hero.date },
-                    { label: 'STATUS', val: '🟢 ON SALE' },
-                    { label: 'HARGA', val: 'Rp 350.000' },
-                    { label: 'CAT.', val: 'Festival A' },
-                  ].map((item) => (
-                    <div key={item.label}>
-                      <p className="text-xs font-mono text-white/30 tracking-widest mb-0.5">{item.label}</p>
-                      <p className="text-sm font-body text-white">{item.val}</p>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Barcode visual */}
-                <div className="flex gap-px">
-                  {Array.from({ length: 40 }).map((_, i) => (
-                    <div
-                      key={i}
-                      className="flex-1 rounded-px"
-                      style={{
-                        height: `${Math.random() > 0.5 ? 24 : 16}px`,
-                        background: i % 3 === 0 ? hero.color : 'rgba(255,255,255,0.15)',
-                        opacity: Math.random() * 0.5 + 0.5,
-                      }}
-                    />
-                  ))}
-                </div>
-
-                <div className="mt-3 text-center">
-                  <p className="text-xs font-mono text-white/20 tracking-widest">**** **** **** 2025</p>
-                </div>
-              </div>
-
-              {/* Floating dots behind */}
-              {[...Array(5)].map((_, i) => (
-                <div
-                  key={i}
-                  className="absolute rounded-full"
-                  style={{
-                    width: `${8 + i * 6}px`,
-                    height: `${8 + i * 6}px`,
-                    background: hero.color,
-                    opacity: 0.15 - i * 0.02,
-                    top: `${10 + i * 15}%`,
-                    right: `${5 + i * 5}%`,
-                    animation: `float ${2 + i}s ease-in-out infinite`,
-                    animationDelay: `${i * 0.3}s`,
-                  }}
-                />
-              ))}
+                CARA KERJA
+              </button>
             </div>
           </div>
+
+          {/* Right: Large illustration */}
+          <div
+            className="relative flex-shrink-0 flex items-center justify-center"
+            style={{ width: '340px', height: '300px' }}
+          >
+            <div
+              className="text-[170px] select-none"
+              style={{ lineHeight: 1, transform: 'rotate(-8deg)', filter: `drop-shadow(0 0 40px ${hero.accentColor}80)` }}
+            >
+              {hero.illustration}
+            </div>
+            {/* Floating circles */}
+            <div className="absolute top-6 right-10 w-14 h-14 rounded-full bg-white/10 animate-bounce" style={{ animationDuration: '2s' }} />
+            <div className="absolute bottom-10 left-6 w-9 h-9 rounded-full bg-white/10 animate-bounce" style={{ animationDuration: '2.7s' }} />
+            <div className="absolute top-1/2 right-2 w-6 h-6 rounded-full bg-white/15 animate-bounce" style={{ animationDuration: '1.9s' }} />
+          </div>
+
+          {/* Prev / Next arrows */}
+          <button
+            onClick={() => goToSlide((heroIndex - 1 + heroItems.length) % heroItems.length)}
+            className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/20 hover:bg-black/40 backdrop-blur-sm flex items-center justify-center text-white text-xl font-bold transition-all z-20"
+          >
+            ‹
+          </button>
+          <button
+            onClick={() => goToSlide((heroIndex + 1) % heroItems.length)}
+            className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/20 hover:bg-black/40 backdrop-blur-sm flex items-center justify-center text-white text-xl font-bold transition-all z-20"
+          >
+            ›
+          </button>
         </div>
 
-        {/* Hero slide indicators */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
+        {/* Dot indicators — stays on dark bg */}
+        <div className="flex justify-center gap-2 py-4" style={{ background: 'rgba(0,0,0,0.4)' }}>
           {heroItems.map((_, i) => (
             <button
               key={i}
-              onClick={() => setHeroIndex(i)}
-              className={`h-1 rounded-full transition-all duration-300 ${
-                i === heroIndex ? 'w-8 bg-neon-pink' : 'w-2 bg-white/20'
-              }`}
+              onClick={() => goToSlide(i)}
+              className="rounded-full transition-all duration-300"
+              style={{
+                width: i === heroIndex ? '28px' : '8px',
+                height: '8px',
+                background: i === heroIndex ? hero.accentColor : 'rgba(255,255,255,0.2)',
+              }}
               aria-label={`Slide ${i + 1}`}
             />
           ))}
         </div>
       </section>
 
-      {/* ====== SEARCH & FILTER ====== */}
+      {/* ====== SEARCH ====== */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" aria-label="Pencarian konser">
         <div className="mb-6">
           <h2 className="font-display text-3xl text-white mb-2">TEMUKAN KONSER</h2>
@@ -283,8 +250,9 @@ const HomePage = () => {
         <SearchFilter onFilter={handleFilter} />
       </section>
 
-      {/* ====== CONCERT GRID ====== */}
+      {/* ====== GENRE PILLS + RESULTS ====== */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20" aria-label="Daftar konser">
+
         {/* Genre filter pills */}
         <div className="flex gap-2 flex-wrap mb-8">
           {genres.map((g) => (
@@ -302,7 +270,7 @@ const HomePage = () => {
           ))}
         </div>
 
-        {/* Results count */}
+        {/* Results bar */}
         <div className="flex items-center justify-between mb-6">
           <p className="text-sm font-mono text-white/30">
             Menampilkan <span className="text-neon-cyan">{filtered.length}</span> konser
@@ -318,7 +286,7 @@ const HomePage = () => {
           </select>
         </div>
 
-        {/* Conditional rendering */}
+        {/* Concerts Grid */}
         {filtered.length === 0 ? (
           <div className="text-center py-20">
             <p className="text-6xl mb-4">🔍</p>
@@ -336,7 +304,7 @@ const HomePage = () => {
 
       {/* ====== HOW IT WORKS MODAL ====== */}
       {showHowItWorks && <HowItWorks onClose={() => setShowHowItWorks(false)} />}
-    </>
+    </div>
   )
 }
 
