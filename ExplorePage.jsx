@@ -8,10 +8,10 @@ const ExplorePage = () => {
   const [selectedPost, setSelectedPost] = useState(null)
   const [page, setPage] = useState(1)
 
-  // CATEGORY ACTIVE
+  
   const [activeCategory, setActiveCategory] = useState('Semua')
 
-  // FETCH API
+  
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true)
