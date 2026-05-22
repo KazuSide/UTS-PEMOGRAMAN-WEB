@@ -187,7 +187,6 @@ const artists = [
   },
 ]
 
-// ─── Sub-components ─────────────────────────────────────────────────────────
 
 const StatBadge = ({ label, value, color }) => (
   <div style={{
@@ -238,14 +237,14 @@ const BioPanel = ({ artist }) => {
         </div>
       </div>
 
-      {/* Stats */}
+     
       <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
         <StatBadge label="FANS" value={artist.fans} color={pink} />
         <StatBadge label="TOURS" value={artist.tours} color={cyan} />
         <StatBadge label="RATING" value={`★${artist.rating}`} color={gold} />
       </div>
 
-      {/* Label badge */}
+      
       <div style={{
         display: 'inline-flex', alignItems: 'center', gap: 6,
         background: 'rgba(0,245,255,0.06)', border: '1px solid rgba(0,245,255,0.15)',
@@ -254,7 +253,7 @@ const BioPanel = ({ artist }) => {
         <span style={{ fontSize: 10, color: cyan, fontFamily: 'monospace', letterSpacing: 1 }}>🎵 {artist.label}</span>
       </div>
 
-      {/* Bio */}
+      
       <div style={{ marginBottom: 24 }}>
         <p style={{ fontFamily: 'monospace', fontSize: 10, color: cyan, letterSpacing: 3, margin: '0 0 10px' }}>TENTANG ARTIS</p>
         {artist.bio.split('\n\n').map((para, i) => (
@@ -266,7 +265,7 @@ const BioPanel = ({ artist }) => {
         ))}
       </div>
 
-      {/* Milestones */}
+      
       <div style={{ marginBottom: 24 }}>
         <p style={{ fontFamily: 'monospace', fontSize: 10, color: gold, letterSpacing: 3, margin: '0 0 12px' }}>PERJALANAN KARIER</p>
         <div style={{ position: 'relative', paddingLeft: 24 }}>
@@ -285,7 +284,7 @@ const BioPanel = ({ artist }) => {
         </div>
       </div>
 
-      {/* Best Albums */}
+      
       <div style={{ marginBottom: 24 }}>
         <p style={{ fontFamily: 'monospace', fontSize: 10, color: pink, letterSpacing: 3, margin: '0 0 10px' }}>ALBUM TERBAIK</p>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
@@ -299,7 +298,7 @@ const BioPanel = ({ artist }) => {
         </div>
       </div>
 
-      {/* Fun fact */}
+      
       <div style={{
         background: 'rgba(0,245,255,0.04)',
         border: '1px solid rgba(0,245,255,0.1)',
@@ -316,7 +315,7 @@ const BioPanel = ({ artist }) => {
   )
 }
 
-// ─── Main Page ───────────────────────────────────────────────────────────────
+
 
 const ArtistsPage = () => {
   const [selectedArtist, setSelectedArtist] = useState(null)
@@ -341,14 +340,14 @@ const ArtistsPage = () => {
     <div className="pt-24 pb-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {/* Header */}
+        
         <div className="mb-10 animate-fade-in-up">
           <h1 className="font-display text-5xl sm:text-6xl text-white mb-4">
             ARTIS<br /><span className="shimmer-text">PILIHAN</span>
           </h1>
         </div>
 
-        {/* Controls */}
+        
         <div className="flex flex-col sm:flex-row gap-4 mb-8">
           <div className="flex-1 relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neon-cyan text-sm">🔎</span>
@@ -374,7 +373,7 @@ const ArtistsPage = () => {
 
         <div className={`flex gap-8 ${selectedArtist ? 'flex-col lg:flex-row' : ''}`}>
 
-          {/* Artist List */}
+          
           <div className={selectedArtist ? 'lg:w-1/2' : 'w-full'}>
             {filteredArtists.length === 0 ? (
               <div className="text-center py-20">
@@ -442,21 +441,21 @@ const ArtistsPage = () => {
             )}
           </div>
 
-          {/* Biography Panel */}
+          
           {selectedArtist && (
             <div className="lg:w-1/2 animate-fade-in-left" style={{ position: 'sticky', top: 96, height: 'calc(100vh - 120px)', display: 'flex', flexDirection: 'column' }}>
-              {/* Close button */}
+              
               <div className="flex justify-end mb-3" style={{ flexShrink: 0 }}>
                 <button onClick={() => setSelectedArtist(null)}
                   className="text-white/30 hover:text-white transition-colors glass rounded-sm px-3 py-1 text-xs font-mono tracking-widest">
                   ✕ TUTUP
                 </button>
               </div>
-              {/* Scrollable bio — fills remaining space */}
+              
               <div style={{ flex: 1, overflowY: 'auto', scrollbarWidth: 'none' }}>
                 <BioPanel artist={selectedArtist} />
               </div>
-              {/* Follow button — always pinned at bottom */}
+              
               <button
                 onClick={() => handleFollow(selectedArtist.id)}
                 style={{ flexShrink: 0, marginTop: 12 }}
