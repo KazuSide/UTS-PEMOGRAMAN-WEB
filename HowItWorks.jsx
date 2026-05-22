@@ -55,7 +55,7 @@ export default function HowItWorks({ onClose }) {
       style={{
         background: 'rgba(0,0,0,0.88)',
         backdropFilter: 'blur(10px)',
-        paddingTop: '72px',   /* tepat di bawah header h-16 (64px) + 8px gap */
+        paddingTop: '72px',   
         paddingLeft: '16px',
         paddingRight: '16px',
         paddingBottom: '16px',
@@ -67,7 +67,7 @@ export default function HowItWorks({ onClose }) {
         className="relative w-full rounded-2xl border border-white/10 bg-dark-800 animate-fade-in-up"
         style={{
           maxWidth: '700px',
-          maxHeight: 'calc(100vh - 88px)',  /* 72px paddingTop + 16px paddingBottom */
+          maxHeight: 'calc(100vh - 88px)',  
           overflowY: 'auto',
           boxShadow: '0 0 60px rgba(255,45,120,0.15), 0 25px 50px rgba(0,0,0,0.6)',
           scrollbarWidth: 'thin',
@@ -75,7 +75,6 @@ export default function HowItWorks({ onClose }) {
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Sticky close button */}
         <button
           onClick={onClose}
           className="sticky top-0 float-right mt-4 mr-4 z-20 w-8 h-8 flex items-center justify-center rounded-full border border-white/15 text-white/50 hover:text-white hover:border-neon-pink/50 hover:bg-neon-pink/10 transition-all duration-200 text-xs font-mono"
@@ -85,7 +84,6 @@ export default function HowItWorks({ onClose }) {
         </button>
 
         <div className="px-6 pt-6 pb-8 sm:px-8 sm:pt-8">
-          {/* Header */}
           <div className="mb-8 text-center">
             <p className="text-xs font-mono text-neon-pink tracking-widest mb-2">// PANDUAN</p>
             <h2 className="font-display text-3xl sm:text-4xl text-white mb-3">
@@ -96,7 +94,6 @@ export default function HowItWorks({ onClose }) {
             </p>
           </div>
 
-          {/* Steps grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
             {steps.map((step) => (
               <div
@@ -108,14 +105,12 @@ export default function HowItWorks({ onClose }) {
                 }}
               >
                 <div className="flex items-start gap-3">
-                  {/* Icon */}
                   <div
                     className="text-2xl flex-shrink-0 w-11 h-11 flex items-center justify-center rounded-lg"
                     style={{ background: `${step.color}18`, border: `1px solid ${step.color}35` }}
                   >
                     {step.icon}
                   </div>
-                  {/* Text */}
                   <div className="min-w-0">
                     <p className="text-xs font-mono mb-1 tracking-widest" style={{ color: step.color }}>
                       LANGKAH {step.number}
@@ -130,7 +125,6 @@ export default function HowItWorks({ onClose }) {
             ))}
           </div>
 
-          {/* Step flow indicator */}
           <div className="flex items-center justify-center gap-1.5 mb-8">
             {steps.map((s, i) => (
               <div key={i} className="flex items-center gap-1.5">
@@ -147,10 +141,8 @@ export default function HowItWorks({ onClose }) {
             ))}
           </div>
 
-          {/* Divider */}
           <div className="border-t border-white/5 mb-6" />
 
-          {/* FAQ */}
           <div className="mb-6">
             <h3 className="font-display text-lg text-white mb-4">
               PERTANYAAN <span className="text-neon-yellow">UMUM</span>
@@ -181,7 +173,6 @@ export default function HowItWorks({ onClose }) {
             </div>
           </div>
 
-          {/* CTA */}
           <div className="text-center pt-2">
             <button
               onClick={onClose}
