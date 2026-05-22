@@ -3,8 +3,6 @@ import { Link, useLocation } from 'react-router-dom'
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false)
-
-  // AUTH POPUP
   const [authOpen, setAuthOpen] = useState(false)
   const [authType, setAuthType] = useState('login')
 
@@ -27,18 +25,16 @@ const Header = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
 
-            {/* Logo */}
             <Link to="/" className="flex items-center gap-2 group">
               <div className="w-8 h-8 bg-neon-pink rounded-sm flex items-center justify-center neon-border-pink transition-all duration-300 group-hover:scale-110">
                 <span className="text-black font-display text-sm">S</span>
               </div>
 
               <span className="font-display text-xl tracking-widest text-white group-hover:text-neon-pink transition-colors duration-300">
-                STAGEFRONT
+                SahabatTiket
               </span>
             </Link>
 
-            {/* Desktop Nav */}
             <nav
               className="hidden md:flex items-center gap-8"
               aria-label="Main navigation"
@@ -66,9 +62,7 @@ const Header = () => {
               ))}
             </nav>
 
-            {/* CTA */}
             <div className="hidden md:flex items-center gap-3">
-
               <button
                 onClick={() => openAuth('signin')}
                 className="px-5 py-2 text-sm font-medium text-white/70 hover:text-white transition-colors duration-300 font-mono tracking-wider"
@@ -82,10 +76,8 @@ const Header = () => {
               >
                 LOGIN
               </button>
-
             </div>
 
-            {/* Hamburger */}
             <button
               className="md:hidden flex flex-col gap-1.5 p-2"
               onClick={() => setMenuOpen(!menuOpen)}
@@ -115,7 +107,6 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Mobile Menu */}
         {menuOpen && (
           <nav
             className="md:hidden glass border-t border-white/5 px-4 py-6 flex flex-col gap-4"
@@ -145,10 +136,8 @@ const Header = () => {
         )}
       </header>
 
-      {/* POPUP LOGIN / SIGN IN */}
       {authOpen && (
         <div className="fixed inset-0 z-[999] bg-black/70 backdrop-blur-sm flex justify-center items-center">
-
           <div
             className="
             w-[420px]
@@ -160,11 +149,8 @@ const Header = () => {
             animate-[fade_.25s]
             "
           >
-
             <div className="p-8">
-
               <div className="flex justify-between items-start">
-
                 <div>
                   <h2 className="text-white text-3xl font-display tracking-widest">
                     {authType === 'login'
@@ -190,11 +176,9 @@ const Header = () => {
                 >
                   ✕
                 </button>
-
               </div>
 
               <form className="mt-8 space-y-4">
-
                 {authType === 'signin' && (
                   <input
                     type="text"
@@ -259,13 +243,9 @@ const Header = () => {
                     ? 'LOGIN'
                     : 'CREATE ACCOUNT'}
                 </button>
-
               </form>
-
             </div>
-
           </div>
-
         </div>
       )}
     </>
