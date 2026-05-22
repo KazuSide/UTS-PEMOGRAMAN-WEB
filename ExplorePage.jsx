@@ -102,7 +102,7 @@ const ExplorePage = () => {
     fetchData()
   }, [page])
 
-  // CATEGORY LIST
+  
   const concertCategories = [
     { icon: '✨', label: 'Semua', color: '#ffffff' },
     { icon: '🎤', label: 'Pengumuman', color: '#FF2D78' },
@@ -112,7 +112,7 @@ const ExplorePage = () => {
     { icon: '🎶', label: 'Music', color: '#00ff88' },
   ]
 
-  // FILTER POSTS
+  
   const filteredPosts =
     activeCategory === 'Semua'
       ? posts
@@ -141,7 +141,7 @@ const ExplorePage = () => {
           </p>
         </div>
 
-        {/* CATEGORY BUTTONS */}
+        
         <div className="flex gap-3 flex-wrap mb-10">
           {concertCategories.map((cat) => (
             <button
@@ -174,7 +174,7 @@ const ExplorePage = () => {
           ))}
         </div>
 
-        {/* LOADING */}
+        
         {loading && (
             <div className="flex flex-col items-center justify-center py-24">
               <div className="relative mb-6">
@@ -187,14 +187,14 @@ const ExplorePage = () => {
             </div>
           )}
 
-        {/* ERROR */}
+        
         {error && !loading && (
           <div className="text-center py-20">
             <p className="text-neon-pink">{error}</p>
           </div>
         )}
 
-        {/* ARTICLES */}
+        
         {!loading && !error && (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -236,7 +236,7 @@ const ExplorePage = () => {
                   }
                 >
 
-                  {/* IMAGE */}
+                  
                   <div className="h-56 overflow-hidden">
                     <img
                       src={post.image}
@@ -252,10 +252,10 @@ const ExplorePage = () => {
                     />
                   </div>
 
-                  {/* CONTENT */}
+                  
                   <div className="p-5">
 
-                    {/* TOP */}
+                    
                     <div className="flex items-center justify-between mb-3">
 
                       <span className="
@@ -276,7 +276,7 @@ const ExplorePage = () => {
 
                     </div>
 
-                    {/* TITLE */}
+                    
                     <h3 className="
                     font-display
                     text-xl
@@ -291,7 +291,7 @@ const ExplorePage = () => {
                       {post.title}
                     </h3>
 
-                    {/* META */}
+                    
                     <div className="
                     flex
                     items-center
@@ -306,7 +306,7 @@ const ExplorePage = () => {
                       <span>{post.date}</span>
                     </div>
 
-                    {/* PREVIEW */}
+                    
                     <p className="
                     text-sm
                     text-white/50
@@ -316,7 +316,7 @@ const ExplorePage = () => {
                       {post.preview}
                     </p>
 
-                    {/* EXPANDED */}
+                    
                     {selectedPost?.id === post.id && (
                       <div className="
                       mt-5
@@ -376,7 +376,7 @@ const ExplorePage = () => {
               ))}
             </div>
 
-            {/* PAGINATION */}
+            
             <div className="flex items-center justify-center gap-4">
 
               <button
