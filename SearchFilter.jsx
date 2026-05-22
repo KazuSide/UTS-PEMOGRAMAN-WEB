@@ -30,9 +30,7 @@ const SearchFilter = ({ onFilter }) => {
   return (
     <section className="glass rounded-sm p-6 border border-white/5">
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Main search row */}
         <div className="flex flex-col sm:flex-row gap-3">
-          {/* Text search */}
           <div className="flex-1 relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neon-pink text-sm">⚡</span>
             <input
@@ -45,7 +43,6 @@ const SearchFilter = ({ onFilter }) => {
             />
           </div>
 
-          {/* Genre select — nilai uppercase agar cocok dengan data concerts */}
           <select
             name="genre"
             value={genre}
@@ -70,7 +67,6 @@ const SearchFilter = ({ onFilter }) => {
           </button>
         </div>
 
-        {/* Toggle advanced */}
         <button
           type="button"
           onClick={() => setIsExpanded(!isExpanded)}
@@ -80,10 +76,8 @@ const SearchFilter = ({ onFilter }) => {
           FILTER LANJUTAN
         </button>
 
-        {/* Advanced filters */}
         {isExpanded && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-2 border-t border-white/5 animate-fade-in-up">
-            {/* City */}
             <div>
               <label className="block text-xs font-mono text-white/40 mb-2 tracking-widest uppercase">Kota</label>
               <input
@@ -96,7 +90,6 @@ const SearchFilter = ({ onFilter }) => {
               />
             </div>
 
-            {/* Date from — label diperjelas */}
             <div>
               <label className="block text-xs font-mono text-white/40 mb-2 tracking-widest uppercase">
                 Tampilkan Konser Setelah
@@ -115,7 +108,6 @@ const SearchFilter = ({ onFilter }) => {
               )}
             </div>
 
-            {/* Price range */}
             <div>
               <label className="block text-xs font-mono text-white/40 mb-2 tracking-widest uppercase">
                 Harga Maks: <span className="text-neon-yellow">{formatPrice(priceRange)}</span>
@@ -136,7 +128,6 @@ const SearchFilter = ({ onFilter }) => {
               </div>
             </div>
 
-            {/* Only available checkbox */}
             <div className="flex items-center gap-3 sm:col-span-2 lg:col-span-3">
               <input
                 type="checkbox"
@@ -151,7 +142,6 @@ const SearchFilter = ({ onFilter }) => {
               </label>
             </div>
 
-            {/* Active filters badge */}
             {(genre || city || dateFrom || onlyAvailable) && (
               <div className="sm:col-span-2 lg:col-span-3 flex flex-wrap gap-2">
                 {genre && (
@@ -181,7 +171,6 @@ const SearchFilter = ({ onFilter }) => {
               </div>
             )}
 
-            {/* Action buttons */}
             <div className="sm:col-span-2 lg:col-span-3 flex gap-3">
               <button
                 type="submit"
