@@ -21,7 +21,7 @@ const HomePage = () => {
     return sorted
   }
 
-  // Hero banners — vibrant, full-bleed illustrated style like Artatix
+  
   const heroItems = [
     {
       id: 0,
@@ -122,9 +122,9 @@ const HomePage = () => {
   return (
     <div className="bg-dark-900 min-h-screen">
 
-      {/* ====== HERO CAROUSEL — full width, no rounding ====== */}
+      
       <section className="relative w-full overflow-hidden pt-16">
-        {/* Slide — edge to edge */}
+        
         <div
           className="relative w-full flex items-center justify-between transition-opacity duration-300"
           style={{
@@ -134,19 +134,19 @@ const HomePage = () => {
             padding: '56px max(32px, calc((100vw - 1280px) / 2 + 32px))',
           }}
         >
-          {/* Dynamic glow overlay */}
+          
           <div
             className="absolute inset-0 pointer-events-none"
             style={{ background: `radial-gradient(ellipse at 30% 50%, ${hero.accentColor}25 0%, transparent 65%)` }}
           />
 
-          {/* Left: Text content */}
+          
           <div className="relative z-10 flex-1" style={{ maxWidth: '520px' }}>
-            {/* Badge row */}
+            
             <div className="flex items-center gap-2 mb-5">
               <div className="flex items-center gap-1.5 bg-black/20 backdrop-blur-sm rounded-sm px-3 py-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
-                <span className="text-white font-mono font-bold text-xs tracking-widest">STAGEFRONT</span>
+                <span className="text-white font-mono font-bold text-xs tracking-widest">SahabatTiket</span>
               </div>
               <span
                 className="font-mono font-bold text-xs px-2 py-0.5 rounded-sm"
@@ -191,7 +191,7 @@ const HomePage = () => {
             </div>
           </div>
 
-          {/* Right: Large illustration */}
+          
           <div
             className="relative flex-shrink-0 flex items-center justify-center"
             style={{ width: '340px', height: '300px' }}
@@ -202,13 +202,13 @@ const HomePage = () => {
             >
               {hero.illustration}
             </div>
-            {/* Floating circles */}
+            
             <div className="absolute top-6 right-10 w-14 h-14 rounded-full bg-white/10 animate-bounce" style={{ animationDuration: '2s' }} />
             <div className="absolute bottom-10 left-6 w-9 h-9 rounded-full bg-white/10 animate-bounce" style={{ animationDuration: '2.7s' }} />
             <div className="absolute top-1/2 right-2 w-6 h-6 rounded-full bg-white/15 animate-bounce" style={{ animationDuration: '1.9s' }} />
           </div>
 
-          {/* Prev / Next arrows */}
+          
           <button
             onClick={() => goToSlide((heroIndex - 1 + heroItems.length) % heroItems.length)}
             className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/20 hover:bg-black/40 backdrop-blur-sm flex items-center justify-center text-white text-xl font-bold transition-all z-20"
@@ -223,7 +223,7 @@ const HomePage = () => {
           </button>
         </div>
 
-        {/* Dot indicators — stays on dark bg */}
+        
         <div className="flex justify-center gap-2 py-4" style={{ background: 'rgba(0,0,0,0.4)' }}>
           {heroItems.map((_, i) => (
             <button
@@ -241,7 +241,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* ====== SEARCH ====== */}
+      
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" aria-label="Pencarian konser">
         <div className="mb-6">
           <h2 className="font-display text-3xl text-white mb-2">TEMUKAN KONSER</h2>
@@ -250,10 +250,10 @@ const HomePage = () => {
         <SearchFilter onFilter={handleFilter} />
       </section>
 
-      {/* ====== GENRE PILLS + RESULTS ====== */}
+      
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20" aria-label="Daftar konser">
 
-        {/* Genre filter pills */}
+        
         <div className="flex gap-2 flex-wrap mb-8">
           {genres.map((g) => (
             <button
@@ -270,7 +270,7 @@ const HomePage = () => {
           ))}
         </div>
 
-        {/* Results bar */}
+        
         <div className="flex items-center justify-between mb-6">
           <p className="text-sm font-mono text-white/30">
             Menampilkan <span className="text-neon-cyan">{filtered.length}</span> konser
@@ -286,7 +286,7 @@ const HomePage = () => {
           </select>
         </div>
 
-        {/* Concerts Grid */}
+        
         {filtered.length === 0 ? (
           <div className="text-center py-20">
             <p className="text-6xl mb-4">🔍</p>
@@ -302,7 +302,7 @@ const HomePage = () => {
         )}
       </section>
 
-      {/* ====== HOW IT WORKS MODAL ====== */}
+      
       {showHowItWorks && <HowItWorks onClose={() => setShowHowItWorks(false)} />}
     </div>
   )
