@@ -10,15 +10,10 @@ export default function ArtistsPage() {
   useEffect(() => {
     const fetchLocalArtists = async () => {
       try {
-        setLoading(true);
-        // Trik iTunes API: Membatasi pencarian hanya untuk region Indonesia (country=id) 
-        // dan mencari kata kunci spesifik musik lokal.
+        setLoading(true)
         const response = await axios.get(
           'https://itunes.apple.com/search?term=indonesia+pop&country=id&entity=album&limit=20'
         );
-        
-        // Memfilter data ganda (karena 1 artis bisa punya banyak album yang terambil)
-        // Kita hanya mengambil 1 data unik per artis
         if (response.data && response.data.results) {
           const uniqueArtists = [];
           const seenArtistIds = new Set();
@@ -43,8 +38,6 @@ export default function ArtistsPage() {
 
     fetchLocalArtists();
   }, []);
-
-  // Fitur pencarian berdasarkan nama artis
   const filteredArtists = artists.filter(artist => 
     (artist.artistName || '').toLowerCase().includes(searchQuery.toLowerCase())
   );
