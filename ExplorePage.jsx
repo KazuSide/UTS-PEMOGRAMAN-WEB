@@ -11,13 +11,10 @@ export default function ExplorePage() {
       try {
         setLoading(true);
         
-        // Menggunakan RSS2JSON untuk mengubah RSS CNN Indonesia menjadi format API yang bisa dibaca React
         const rssUrl = 'https://www.cnnindonesia.com/hiburan/rss';
         const response = await axios.get(`https://api.rss2json.com/v1/api.json?rss_url=${rssUrl}`);
         
-        // Data dari rss2json tersimpan di dalam array 'items'
         if (response.data && response.data.items) {
-          // Ambil 12 berita agar pas dengan grid layout
           setNews(response.data.items.slice(0, 12));
         } else {
           setNews([]);
@@ -33,14 +30,14 @@ export default function ExplorePage() {
     fetchNews();
   }, []);
 
-  // Format tanggal dari API agar lebih rapi
+  
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'short', day: 'numeric' };
-    const date = new Date(dateString.replace(' ', 'T')); // Penyesuaian format string waktu RSS
+    const date = new Date(dateString.replace(' ', 'T')); 
     return date.toLocaleDateString('id-ID', options);
   };
 
-  // Fungsi untuk membersihkan tag HTML bawaan dari RSS untuk deskripsi
+  
   const stripHtml = (html) => {
     const doc = new DOMParser().parseFromString(html, 'text/html');
     return doc.body.textContent || "";
@@ -77,7 +74,7 @@ export default function ExplorePage() {
       {!loading && !error && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 relative z-10">
           {news.map((article, index) => {
-            // Mengambil gambar dari thumbnail atau URL enclosure
+            
             const imageUrl = article.thumbnail || article.enclosure?.link || 'https://via.placeholder.com/600x400/1E1535/00F5FF?text=BERITA+LOKAL';
             
             return (
