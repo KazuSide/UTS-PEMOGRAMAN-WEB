@@ -1,436 +1,124 @@
-import { useState, useEffect } from 'react'
-import axios from 'axios'
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
-const ExplorePage = () => {
-  const [posts, setPosts] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [selectedPost, setSelectedPost] = useState(null)
-  const [page, setPage] = useState(1)
+export default function ExplorePage() {
+  const [news, setNews] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  
-  const [activeCategory, setActiveCategory] = useState('Semua')
-
-  
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true)
-      setError(null)
-
+    const fetchNews = async () => {
       try {
-        const response = await axios.get(
-          `https://jsonplaceholder.typicode.com/posts?_page=${page}&_limit=10`
-        )
-
-        const modifiedPosts = response.data.map((post, index) => ({
-          ...post,
-
-          title: [
-            'Pamungkas World Tour 2025',
-            'Review Konser Hindia Jakarta',
-            'Tips War Ticket Konser',
-            'Reality Club Bawa Visual Baru',
-            'Raisa Siapkan Album Baru',
-          ][index % 5],
-
-          body: [
-            `Pamungkas resmi mengumumkan rangkaian World Tour 2025 yang akan digelar di beberapa kota besar Asia.
-            Konser ini menghadirkan konsep immersive stage dengan visual sinematik,
-            tata cahaya futuristik, dan pengalaman audio premium untuk seluruh penonton.`,
-
-            `Konser Hindia di Jakarta berhasil menciptakan suasana emosional sepanjang pertunjukan.
-            Penonton ikut bernyanyi bersama dalam lagu-lagu populer seperti Evaluasi dan Secukupnya
-            dengan tata panggung minimalis namun sangat artistik.`,
-
-            `War tiket konser sering menjadi tantangan besar bagi penggemar musik.
-            Pastikan kamu sudah login sebelum penjualan dimulai,
-            gunakan koneksi internet stabil, dan siapkan metode pembayaran
-            agar proses checkout lebih cepat.`,
-
-            `Reality Club membawa konsep visual terbaru dengan nuansa sunset dan city pop aesthetic.
-            Performa live mereka dipadukan dengan lighting warm tone dan efek visual
-            yang membuat konser terasa lebih intimate.`,
-
-            `Raisa dikabarkan sedang mempersiapkan album terbaru
-            yang akan dirilis akhir tahun ini.
-            Album tersebut disebut akan menghadirkan warna musik baru
-            dengan sentuhan jazz modern dan orchestral pop.`,
-          ][index % 5],
-
-          image: [
-            'https://images.unsplash.com/photo-1501386761578-eac5c94b800a',
-            'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f',
-            'https://images.unsplash.com/photo-1516280440614-37939bbacd81',
-            'https://images.unsplash.com/photo-1507874457470-272b3c8d8ee2',
-            'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee',
-          ][index % 5],
-
-          category: [
-            'Pengumuman',
-            'Review',
-            'Tips',
-            'Gallery',
-            'Music',
-          ][index % 5],
-
-          author: [
-            'Admin ConcertHub',
-            'Music Review',
-            'Ticketing Team',
-            'Concert Media',
-            'Editorial',
-          ][index % 5],
-
-          date: [
-            '12 Mei 2026',
-            '15 Mei 2026',
-            '18 Mei 2026',
-            '20 Mei 2026',
-            '22 Mei 2026',
-          ][index % 5],
-        }))
-
-        setPosts(modifiedPosts)
+        setLoading(true);
+        
+        // Menggunakan RSS2JSON untuk mengubah RSS CNN Indonesia menjadi format API yang bisa dibaca React
+        const rssUrl = 'https://www.cnnindonesia.com/hiburan/rss';
+        const response = await axios.get(`https://api.rss2json.com/v1/api.json?rss_url=${rssUrl}`);
+        
+        // Data dari rss2json tersimpan di dalam array 'items'
+        if (response.data && response.data.items) {
+          // Ambil 12 berita agar pas dengan grid layout
+          setNews(response.data.items.slice(0, 12));
+        } else {
+          setNews([]);
+        }
+        setError(null);
       } catch (err) {
-        setError('Gagal memuat data. Periksa koneksi internet kamu.')
-        console.error('Axios error:', err)
+        setError('Gagal memuat berita. Pastikan koneksi internet stabil.');
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchData()
-  }, [page])
+    fetchNews();
+  }, []);
 
-  
-  const concertCategories = [
-    { icon: '✨', label: 'Semua', color: '#ffffff' },
-    { icon: '🎤', label: 'Pengumuman', color: '#FF2D78' },
-    { icon: '🎵', label: 'Review', color: '#00F5FF' },
-    { icon: '📸', label: 'Gallery', color: '#FFE600' },
-    { icon: '🎟️', label: 'Tips', color: '#a78bfa' },
-    { icon: '🎶', label: 'Music', color: '#00ff88' },
-  ]
+  // Format tanggal dari API agar lebih rapi
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    const date = new Date(dateString.replace(' ', 'T')); // Penyesuaian format string waktu RSS
+    return date.toLocaleDateString('id-ID', options);
+  };
 
-  
-  const filteredPosts =
-    activeCategory === 'Semua'
-      ? posts
-      : posts.filter(
-          (post) =>
-            post.category.toLowerCase() ===
-            activeCategory.toLowerCase()
-        )
+  // Fungsi untuk membersihkan tag HTML bawaan dari RSS untuk deskripsi
+  const stripHtml = (html) => {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || "";
+  };
 
   return (
-    <div className="pt-24 pb-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        {/* HEADER */}
-        <div className="mb-12 animate-fade-in-up">
-          <h1 className="font-display text-5xl sm:text-6xl text-white mb-4">
-            BERITA & <br />
-            <span className="shimmer-text">ARTIKEL</span>
-          </h1>
-
-          <p className="text-white/40 font-body max-w-lg">
-            Update terbaru seputar dunia konser,
-            review penonton,
-            tips mendapatkan tiket,
-            dan cerita dari backstage.
-          </p>
-        </div>
-
-        
-        <div className="flex gap-3 flex-wrap mb-10">
-          {concertCategories.map((cat) => (
-            <button
-              key={cat.label}
-              onClick={() => setActiveCategory(cat.label)}
-              className={`
-              flex
-              items-center
-              gap-2
-              px-4
-              py-2
-              glass
-              rounded-sm
-              text-sm
-              font-mono
-              transition-all
-              duration-300
-              border
-
-              ${
-                activeCategory === cat.label
-                  ? 'bg-neon-pink text-black border-neon-pink shadow-[0_0_20px_rgba(255,45,120,0.4)]'
-                  : 'text-white/60 border-white/10 hover:text-white hover:border-neon-pink/30'
-              }
-              `}
-            >
-              <span>{cat.icon}</span>
-              {cat.label}
-            </button>
-          ))}
-        </div>
-
-        
-        {loading && (
-            <div className="flex flex-col items-center justify-center py-24">
-              <div className="relative mb-6">
-                <div className="w-16 h-16 border-2 border-neon-pink/20 rounded-full" />
-                <div className="absolute inset-0 w-16 h-16 border-t-2 border-neon-pink rounded-full animate-spin" />
-                <div className="absolute inset-2 w-12 h-12 border-t-2 border-neon-cyan rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '0.8s' }} />
-              </div>
-              <p className="font-mono text-neon-pink tracking-widest text-sm animate-pulse">MEMUAT DATA...</p>
-              <p className="font-body text-white/20 text-xs mt-2">Kumpulan artikel tentang artis, musik, dan konser</p>
-            </div>
-          )}
-
-        
-        {error && !loading && (
-          <div className="text-center py-20">
-            <p className="text-neon-pink">{error}</p>
-          </div>
-        )}
-
-        
-        {!loading && !error && (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-
-              {/* EMPTY STATE */}
-              {filteredPosts.length === 0 && (
-                <div className="col-span-full text-center py-20">
-                  <p className="text-white/30 font-mono">
-                    Tidak ada artikel dalam kategori ini.
-                  </p>
-                </div>
-              )}
-
-              {filteredPosts.map((post, i) => (
-                <article
-                  key={post.id}
-                  className="
-                  glass
-                  rounded-sm
-                  overflow-hidden
-                  hover:border-neon-cyan/30
-                  transition-all
-                  duration-300
-                  cursor-pointer
-                  group
-                  animate-fade-in-up
-                  "
-                  style={{
-                    animationDelay: `${i * 60}ms`,
-                    animationFillMode: 'forwards',
-                    opacity: 0,
-                  }}
-                  onClick={() =>
-                    setSelectedPost(
-                      selectedPost?.id === post.id
-                        ? null
-                        : post
-                    )
-                  }
-                >
-
-                  
-                  <div className="h-56 overflow-hidden">
-                    <img
-                      src={post.image}
-                      alt={post.title}
-                      className="
-                      w-full
-                      h-full
-                      object-cover
-                      group-hover:scale-110
-                      transition-transform
-                      duration-700
-                      "
-                    />
-                  </div>
-
-                  
-                  <div className="p-5">
-
-                    
-                    <div className="flex items-center justify-between mb-3">
-
-                      <span className="
-                      text-xs
-                      font-mono
-                      text-neon-pink
-                      ">
-                        {post.category}
-                      </span>
-
-                      <span className="
-                      text-xs
-                      text-white/30
-                      font-mono
-                      ">
-                        POST #{post.id}
-                      </span>
-
-                    </div>
-
-                    
-                    <h3 className="
-                    font-display
-                    text-xl
-                    text-white
-                    mb-3
-                    group-hover:text-neon-cyan
-                    transition-colors
-                    duration-300
-                    leading-tight
-                    uppercase
-                    ">
-                      {post.title}
-                    </h3>
-
-                    
-                    <div className="
-                    flex
-                    items-center
-                    gap-3
-                    text-xs
-                    text-white/30
-                    font-mono
-                    mb-4
-                    ">
-                      <span>{post.author}</span>
-                      <span>•</span>
-                      <span>{post.date}</span>
-                    </div>
-
-                    
-                    <p className="
-                    text-sm
-                    text-white/50
-                    leading-relaxed
-                    line-clamp-3
-                    ">
-                      {post.preview}
-                    </p>
-
-                    
-                    {selectedPost?.id === post.id && (
-                      <div className="
-                      mt-5
-                      pt-5
-                      border-t
-                      border-white/10
-                      animate-fade-in-up
-                      ">
-
-                        <p className="
-                        text-sm
-                        text-white/70
-                        leading-8
-                        ">
-                          {post.body}
-                        </p>
-
-                        <div className="flex gap-3 mt-5">
-
-                          <button
-                            className="
-                            px-5
-                            py-2
-                            bg-neon-pink
-                            text-black
-                            text-xs
-                            font-bold
-                            font-mono
-                            rounded-sm
-                            "
-                          >
-                            BACA SELENGKAPNYA
-                          </button>
-
-                          <button
-                            className="
-                            px-5
-                            py-2
-                            glass
-                            border
-                            border-white/10
-                            text-white/50
-                            text-xs
-                            font-mono
-                            rounded-sm
-                            hover:text-white
-                            "
-                          >
-                            BAGIKAN
-                          </button>
-
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </article>
-              ))}
-            </div>
-
-            
-            <div className="flex items-center justify-center gap-4">
-
-              <button
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                disabled={page === 1}
-                className="
-                px-5
-                py-2.5
-                glass
-                border
-                border-white/10
-                text-sm
-                font-mono
-                text-white/60
-                rounded-sm
-                hover:text-white
-                transition-all
-                duration-300
-                disabled:opacity-30
-                "
-              >
-                ← PREV
-              </button>
-
-              <span className="font-mono text-sm text-white/40">
-                Halaman <span className="text-neon-pink">{page}</span>
-              </span>
-
-              <button
-                onClick={() => setPage((p) => p + 1)}
-                className="
-                px-5
-                py-2.5
-                glass
-                border
-                border-white/10
-                text-sm
-                font-mono
-                text-white/60
-                rounded-sm
-                hover:text-white
-                transition-all
-                duration-300
-                "
-              >
-                NEXT →
-              </button>
-
-            </div>
-          </>
-        )}
+    <div className="container mx-auto px-4 py-24 min-h-screen">
+      <div className="text-center mb-12 relative z-10">
+        <h1 className="text-4xl md:text-5xl font-display text-white mb-4">
+          MUSIC <span className="text-neon-cyan drop-shadow-[0_0_10px_rgba(0,245,255,0.8)]">UPDATES</span>
+        </h1>
+        <p className="text-gray-400 font-body">Berita hiburan dan musik terkini dari Indonesia.</p>
       </div>
-    </div>
-  )
-}
 
-export default ExplorePage
+      {loading && (
+        <div className="flex flex-col items-center justify-center py-20">
+          <div className="w-12 h-12 border-4 border-dark-700 border-t-neon-cyan rounded-full animate-spin mb-4 shadow-[0_0_15px_rgba(0,245,255,0.5)]"></div>
+          <p className="text-neon-cyan font-mono animate-pulse">Memuat data dari server...</p>
+        </div>
+      )}
+
+      {error && !loading && (
+        <div className="bg-dark-800 border border-red-500/50 rounded-lg p-8 text-center max-w-md mx-auto relative z-10">
+          <p className="text-red-400 mb-6 font-body">{error}</p>
+          <button 
+            onClick={() => window.location.reload()}
+            className="px-6 py-2 bg-transparent border border-neon-cyan text-neon-cyan rounded hover:bg-neon-cyan/10 transition-colors font-mono"
+          >
+            Coba Lagi
+          </button>
+        </div>
+      )}
+
+      {!loading && !error && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 relative z-10">
+          {news.map((article, index) => {
+            // Mengambil gambar dari thumbnail atau URL enclosure
+            const imageUrl = article.thumbnail || article.enclosure?.link || 'https://via.placeholder.com/600x400/1E1535/00F5FF?text=BERITA+LOKAL';
+            
+            return (
+              <div 
+                key={index} 
+                className="bg-dark-800 border border-dark-700 rounded-xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:border-neon-cyan hover:shadow-[0_0_20px_rgba(0,245,255,0.3)] flex flex-col group"
+              >
+                <div className="h-48 w-full bg-dark-600 relative overflow-hidden">
+                  <img 
+                    src={imageUrl} 
+                    alt={article.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute top-2 left-2 bg-dark-900/80 backdrop-blur border border-neon-cyan text-neon-cyan text-xs font-mono px-2 py-1 rounded">
+                    {formatDate(article.pubDate)}
+                  </div>
+                </div>
+                
+                <div className="p-5 flex-grow flex flex-col">
+                  <h2 className="text-lg font-bold text-white mb-3 line-clamp-2 leading-snug group-hover:text-neon-cyan transition-colors">
+                    {article.title}
+                  </h2>
+                  
+                  <p className="text-gray-400 text-sm font-body mb-6 line-clamp-3 flex-grow">
+                    {stripHtml(article.description)}
+                  </p>
+
+                  <a 
+                    href={article.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block text-center w-full py-2.5 bg-neon-cyan/10 text-neon-cyan border border-neon-cyan/50 rounded hover:bg-neon-cyan hover:text-dark-900 transition-all duration-300 font-bold mt-auto"
+                  >
+                    BACA DI CNN
+                  </a>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
